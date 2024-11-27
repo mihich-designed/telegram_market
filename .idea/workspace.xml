@@ -4,11 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21c62b0f-7eef-4c22-be78-7f153997ce0b" name="Changes" comment="master_Ver_1">
+    <list default="true" id="21c62b0f-7eef-4c22-be78-7f153997ce0b" name="Changes" comment="master_Ver_2">
+      <change afterPath="$PROJECT_DIR$/data/marketplace.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/bot/handlers/product_handlers.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/bot/handlers/product_handlers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/bot/keyboards/cart_keyboards.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/bot/keyboards/cart_keyboards.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/bot/keyboards/product_keyboards.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/bot/keyboards/product_keyboards.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/database/queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/database/queries.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -102,12 +104,21 @@
       <option name="project" value="LOCAL" />
       <updated>1732704448668</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="master_Ver_2">
+      <option name="closed" value="true" />
+      <created>1732713046309</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1732713046309</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="master_Ver_0" />
     <MESSAGE value="master_Ver_1" />
-    <option name="LAST_COMMIT_MESSAGE" value="master_Ver_1" />
+    <MESSAGE value="master_Ver_2" />
+    <option name="LAST_COMMIT_MESSAGE" value="master_Ver_2" />
   </component>
 </project>

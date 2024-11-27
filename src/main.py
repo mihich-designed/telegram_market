@@ -7,6 +7,8 @@ import logging
 from aiogram.types import Message
 from src import config
 from src.bot.keyboards.cart_keyboards import main_keyboard
+# from src.bot.handlers.product_handlers import catalog
+from src.database.queries import metadata, engine
 
 load_dotenv()
 
@@ -14,6 +16,10 @@ bot = Bot(os.getenv('TOKEN'))
 dp = Dispatcher(bot)
 
 
+async def on_startup(_):
+    '''Запуск БД вместе с запуском бота'''
+    metadata.create_all(engine)
+    print('Программа успешно запущена')
 
 
 @dp.message_handler(commands=['start'])
@@ -23,16 +29,16 @@ async def cmd_start(message: Message):
     await message.answer(f'Привет, {message.from_user.first_name}!', reply_markup=main_keyboard)
 
 
+@dp.message_handler(commands=['catalog'])
+async def catalog(message: Message):
+    '''Обработчик команды просмотр каталога'''
+    await message.answer('Каталог')
+
+
 @dp.message_handler()
 async def unknown_cmd(message: Message):
     '''Обработчик незнакомых команд'''
     await message.reply('Я не знаю такой команды')
-
-
-@dp.message_handler(commands=['catalog'])
-async def catalog(message: Message):
-    '''Обработчик команды просмотр магазина'''
-    await message.answer('Каталог')
 
 
 @dp.message_handler(content_types=['sticker'])
@@ -68,9 +74,7 @@ async def main():
 if __name__ == '__main__':
     if config.DEBUG:
         logging.basicConfig(level=logging.INFO)
-    executor.start_polling(dp)
-
-    # try:
-    #     asyncio.run(main())
-    # except KeyboardInterrupt:
-    #     print('Exit')
+    try:
+        executor.start_polling(dp, on_startup=on_startup)
+    except Exception as e:
+        print(f'Ошибка: {e}')
