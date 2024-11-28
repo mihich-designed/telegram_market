@@ -1,30 +1,37 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, text
-from sqlalchemy.orm import sessionmaker
-import os
-from dotenv import load_dotenv
+from .models import Cart, Product
+from .db_session import get_session
 
-load_dotenv()
+def add_user(user_id):
+    '''
+    Проверяет существование пользователя в БД
+    и добавляет его id в таблицу users, если такого id еще нет
+    '''
+    with get_session() as session:
+        try:
+            user_exists = session.query(Cart).filter(Cart.user_id == user_id).first()
+            if not user_exists:
+                new_user = Cart(user_id=user_id)
+                session.add(new_user)
+                session.commit()
+        except Exception as e:
+            session.rollback()
+            print(f"Ошибка при добавлении пользователя: {e}")
 
-db_path = os.getenv('DB_LOCAL_PATH')
-engine = create_engine(f'sqlite:///{db_path}')
-metadata = MetaData()
-
-# Определение структуры таблицы accounts
-accounts_table = Table('accounts', metadata,
-    Column('id', Integer, primary_key=True, autoincrement=True),
-    Column('cart_id', String)
-)
-
-# Определение структуры таблицы items
-items_table = Table('items', metadata,
-    Column('id', Integer, primary_key=True, autoincrement=True),
-    Column('name', String),
-    Column('description', String),
-    Column('price', String),
-    Column('image', String)
-)
-
-metadata.create_all(engine)
+def add_product(name, desc, price, image):
+    '''Добавление товаров в БД'''
+    with get_session() as session:
+        try:
+            new_product = Product(
+                name=name,
+                description=desc,
+                price=price,
+                image_id=image,
+            )
+            session.add(new_product)
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            print(f"Ошибка при добавлении товара: {e}")
 
 
 
