@@ -14,8 +14,12 @@ with db_session.get_session() as session:
         for product in session.query(models.Product).all():
             catalog_keyboard.add(
                 InlineKeyboardButton(
-                    text=f'{product.name} - {product.price} руб.', callback_data='add_cart'
+                    text=f'{product.description} - {product.price} руб.', callback_data=f'add_cart:{product.id}'
                 )
             )
     except Exception as e:
         print(f'Ошибка: {e}')
+
+# def add_product_in_cart():
+#     with db_session.get_session() as session:
+#         try:

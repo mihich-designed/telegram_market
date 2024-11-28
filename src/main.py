@@ -8,7 +8,7 @@ from aiohttp import ClientSession
 import logging
 from aiogram.types import Message, CallbackQuery
 from src import config
-from src.bot.keyboards.cart_keyboards import main_keyboard
+from src.bot.keyboards import cart_keyboards
 from src.bot.keyboards.product_keyboards import catalog_keyboard
 from src.database import models
 from src.database import queries
@@ -37,18 +37,22 @@ async def cmd_start(message: Message):
     user_id = message.from_user.id
     queries.add_user(user_id)
     await message.answer_sticker('CAACAgIAAxkBAANBZ0b5uy3ZDT4I3W_u9O6_KYrYMPIAAm8AA8GcYAzLDn2LwN1NVjYE')
-    await message.answer(f'Привет, {message.from_user.first_name}!', reply_markup=main_keyboard)
+    await message.answer(f'Привет, {message.from_user.first_name}!', reply_markup=cart_keyboards.main_keyboard)
 
 
 @dp.callback_query_handler()
 async def query_callback_keyboard(callback_query: CallbackQuery):
     '''Обработчик коллбэков каталога и корзины'''
+    user_id = callback_query.from_user.id
     if callback_query.data == 'catalog':
         await callback_query.message.answer(text='Каталог', reply_markup=catalog_keyboard)
-        # await bot.send_message(chat_id=callback_query.from_user.id, text='Каталог')
     elif callback_query.data == 'cart':
-
-        await bot.send_message(chat_id=callback_query.from_user.id, text='Корзина')
+        cart_keyboard = cart_keyboards.create_cart_keyboard(user_id)
+        await callback_query.message.answer(text='Корзина', reply_markup=cart_keyboard)
+    elif 'add_cart' in callback_query.data:
+        product_str_id = callback_query.data.split(':')[1]
+        product_id = int(product_str_id)
+        queries.add_product_in_cart(user_id, product_id)
 
 
 @dp.message_handler(content_types=['sticker'])

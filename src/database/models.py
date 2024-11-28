@@ -1,7 +1,8 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, text
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 import os
 from dotenv import load_dotenv
+from sqlalchemy.orm import relationship, configure_mappers
 
 load_dotenv()
 
@@ -13,7 +14,7 @@ class Cart(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(String)
     cart_id = Column(String, nullable=True)
-
+    items = relationship("CartItem", back_populates="cart") # Связь many-to-many через CartItem
 class Product(Base):
     __tablename__ = 'products'
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -21,26 +22,22 @@ class Product(Base):
     description = Column(String)
     price = Column(String)
     image_id = Column(String)
+    cart_items = relationship("CartItem", back_populates="product") # Связь many-to-many через CartItem
 
+class CartItem(Base):
+    __tablename__ = 'cart_items'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    cart_id = Column(Integer, ForeignKey('cart.id'))
+    product_id = Column(Integer, ForeignKey('products.id'))
+    quantity = Column(Integer)  # Количество товара в корзине
+
+    # Обратные связи
+    cart = relationship("Cart", back_populates="items")
+    product = relationship("Product", back_populates="cart_items")
+
+# configure_mappers()
 Base.metadata.create_all(engine)
 
-# # Определение структуры таблицы accounts
-# users_table = Table('users', metadata,
-#     Column('id', Integer, primary_key=True, autoincrement=True),
-#     Column('user_id', String),
-#     Column('cart_id', String, nullable=True)
-# )
-#
-# # Определение структуры таблицы items
-# products_table = Table('products', metadata,
-#     Column('id', Integer, primary_key=True, autoincrement=True),
-#     Column('name', String),
-#     Column('description', String),
-#     Column('price', String),
-#     Column('image_id', String)
-# )
-
-# metadata.create_all(engine)
 
 
 

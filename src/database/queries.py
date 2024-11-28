@@ -33,6 +33,9 @@ def add_product(name, desc, price, image):
             session.rollback()
             print(f"Ошибка при добавлении товара: {e}")
 
+def add_product_in_cart(user_id, product_id):
+    pass
+
 
 
 
