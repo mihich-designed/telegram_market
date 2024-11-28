@@ -9,6 +9,7 @@ import logging
 from aiogram.types import Message, CallbackQuery
 from src import config
 from src.bot.keyboards.cart_keyboards import main_keyboard
+from src.bot.keyboards.product_keyboards import catalog_keyboard
 from src.database import models
 from src.database import queries
 from src.bot.handlers import add_product_handlers
@@ -43,8 +44,8 @@ async def cmd_start(message: Message):
 async def query_callback_keyboard(callback_query: CallbackQuery):
     '''Обработчик коллбэков каталога и корзины'''
     if callback_query.data == 'catalog':
-
-        await bot.send_message(chat_id=callback_query.from_user.id, text='Каталог')
+        await callback_query.message.answer(text='Каталог', reply_markup=catalog_keyboard)
+        # await bot.send_message(chat_id=callback_query.from_user.id, text='Каталог')
     elif callback_query.data == 'cart':
 
         await bot.send_message(chat_id=callback_query.from_user.id, text='Корзина')
